@@ -12,7 +12,7 @@ class VendingMachine
   end
 
   def introduce_product(key, name, price, count)
-    products_hash[key] = { name: name, price: price, count: count }
+    products_hash[key] = { "name" => name, "price" => price, "count" => count }
   end
 
   def buy(key)
@@ -26,14 +26,16 @@ class VendingMachine
     changes_hash.each_key do |change_key|
       coins_hash[change_key.to_s] -= changes_hash[change_key]
     end
-    changes_hash
+    changes_hash.select {|_,v| v > 0 }
   end
 
   private
 
   def changes_hash(amount)
-    sorted_nominations = nominations.sort.reverse
     change_result = {}
+    return change_result if amount == 0
+    sorted_nominations = nominations.sort.reverse
+
 
     for i in 0..(sorted_nominations.length - 1) do
       nomination = sorted_nominations[i]
